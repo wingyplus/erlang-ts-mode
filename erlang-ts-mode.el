@@ -11,8 +11,10 @@
    '((atom) @font-lock-constant-face)
 
    :language 'erlang
+   :override t
    :feature 'variable
-   '((var) @font-lock-variable-name-face)
+   '((var) @font-lock-variable-name-face
+     ((var) @var (:match "^_" @var)) @font-lock-comment-face)
 
    :language 'erlang
    :feature 'number
@@ -20,7 +22,6 @@
      (float) @font-lock-number-face)
 
    :language 'erlang
-   :override t
    :feature 'string
    '((string) @font-lock-string-face
      (binary) @font-lock-string-face)
@@ -28,6 +29,23 @@
    :language 'erlang
    :feature 'comment
    '((comment) @font-lock-comment-face)
+
+   :language 'erlang
+   :feature 'bracket
+   '((["(" ")" "{" "}" "[" "]" "#"] @font-lock-bracket-face))
+
+   :language 'erlang
+   :feature 'operator
+   '((["==" "=:=" "=/=" "=<" ">=" "<" ">"]) @font-lock-operator-face
+     ([":" ":=" "!" "+" "=" "->" "=>" "|"]) @font-lock-operator-face)
+
+   :language 'erlang
+   :feature 'keyword
+   '((["fun" "div"]) @font-lock-keyword-face)
+
+   :language 'erlang
+   :feature 'delimeter
+   '((["," "." ";"]) @font-lock-delimeter-face)
 
    ;; BUG: delimeter cause highlight due to this feature override it.
    :language 'erlang
@@ -58,25 +76,6 @@
 
    :language 'erlang
    :override t
-   :feature 'bracket
-   '((["(" ")" "{" "}" "[" "]" "#"] @font-lock-bracket-face))
-
-   :language 'erlang
-   :feature 'operator
-   '((["==" "=:=" "=/=" "=<" ">=" "<" ">"]) @font-lock-operator-face
-     ([":" ":=" "!" "+" "=" "->" "=>" "|"]) @font-lock-operator-face)
-
-   :language 'erlang
-   :feature 'keyword
-   '((["fun" "div"]) @font-lock-keyword-face)
-
-   :language 'erlang
-   :override t
-   :feature 'delimeter
-   '((["," "." ";"]) @font-lock-delimeter-face)
-
-   :language 'erlang
-   :override t
    :feature 'error
    '((ERROR) @font-lock-warning-face))
   "Tree-sitter font-lock settings for `erlang-ts-mode'.")
@@ -103,10 +102,10 @@
     (setq-local treesit-font-lock-settings erlang-ts-mode--treesit-settings)
     ;; TODO: clarify feature list order.
     (setq-local treesit-font-lock-feature-list
-		'((atom variable number string)
-		  (comment)
-		  (attribute function alias delimeter bracket keyword)
-		  (operator delimeter bracket)))
+		'((comment)
+		  (atom string)
+		  (number)
+		  (attribute function alias operator delimeter bracket variable error)))
 
     (treesit-major-mode-setup)))
 
